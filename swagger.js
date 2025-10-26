@@ -11,11 +11,12 @@ const docs = {
       "A RESTful API service that allow user to create and manage their tickets",
   },
   basePath: "/",
-  schemes: ["http","https"],
+  schemes: ["http", "https"],
   host: process.env.HOST,
   tags: [
     { name: "Home" },
     { name: "Auth", description: "Authentication Endpoints" },
+    { name: "Users", description: "User Management Endpoints" },
     { name: "Tickets", description: "Ticket Management Endpoints" },
   ],
 };

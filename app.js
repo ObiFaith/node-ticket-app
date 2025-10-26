@@ -11,9 +11,10 @@ import {
 } from "./middlewares/index.js";
 import { configDotenv } from "dotenv";
 import connectDb from "./db/connect.js";
+import authRouter from "./routes/auth.js";
+import userRouter from "./routes/user.js";
 import SwaggerUI from "swagger-ui-express";
-import authRouter from "./router/auth.js";
-import ticketRouter from "./router/ticket.js";
+import ticketRouter from "./routes/ticket.js";
 
 configDotenv();
 
@@ -34,6 +35,12 @@ app.get("/", (_, res) =>
   )
 );
 app.use("/api/v1/auth", /* #swagger.tags = ['Auth'] */ authRouter);
+app.use(
+  "/api/v1/users",
+  /* #swagger.tags = ['Users'] */
+  /* #swagger.security = [{"bearerAuth": []}] */
+  userRouter
+);
 app.use(
   "/api/v1/tickets",
   AuthenticatedUser,

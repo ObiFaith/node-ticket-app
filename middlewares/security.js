@@ -8,7 +8,6 @@ import { configDotenv } from "dotenv";
 configDotenv();
 
 export const securityMiddleware = app => {
-  console.log(process.env.FRONTEND_URL)
   app.set("trust proxy", 1);
   // logger
   process.env.NODE_ENV === "development"
