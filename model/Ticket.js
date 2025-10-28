@@ -13,6 +13,12 @@ const TicketSchema = new mongoose.Schema(
     description: {
       type: String,
     },
+    status: {
+      type: String,
+      enum: ["open", "in_progress", "closed"],
+      default: "open",
+      required: [true, "Status is required!"],
+    },
     priority: {
       type: String,
       enum: ["low", "medium", "high"],
@@ -31,7 +37,6 @@ const TicketSchema = new mongoose.Schema(
 TicketSchema.set("toJSON", {
   transform: (doc, ret) => {
     ret.id = ret._id;
-    ret.userId = ret.user;
 
     delete ret._id;
     delete ret.__v;

@@ -1,6 +1,7 @@
 import { Ticket } from "../model/Ticket.js";
 import { StatusCodes } from "http-status-codes";
 import { NotFoundError } from "../errors/index.js";
+import mongoose from "mongoose";
 
 export const getTicket = async (req, res) => {
   const { id: _id } = req.params;
@@ -24,14 +25,45 @@ export const getTicket = async (req, res) => {
 };
 
 export const getTickets = async (req, res) => {
-  const { userId: user } = req.user;
-  const tickets = await Ticket.find({ user });
+  try {
+    const userId = req.user.userId;
+    const tickets = await Ticket.find({ user: userId });
+    const aggrCounts = await Ticket.aggregate([
+      { $match: { user: new mongoose.Types.ObjectId(userId) } }, // cast to ObjectId
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
 
-  res.status(StatusCodes.OK).json({
-    status: "success",
-    message: "Tickets retrieved successfully!",
-    tickets,
-  });
+    const counts = {
+      totalTickets: tickets.length,
+      openTickets: 0,
+      inProgressTickets: 0,
+      resolvedTickets: 0,
+    };
+
+    aggrCounts.forEach(c => {
+      if (c._id === "open") counts.openTickets = c.count;
+      if (c._id === "in_progress") counts.inProgressTickets = c.count;
+      if (c._id === "closed") counts.resolvedTickets = c.count;
+    });
+
+    res.status(StatusCodes.OK).json({
+      status: "success",
+      message: "Tickets retrieved successfully!",
+      tickets,
+      counts,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      status: "error",
+      message: "Failed to retrieve tickets.",
+    });
+  }
 };
 
 export const createTicket = async (req, res) => {
