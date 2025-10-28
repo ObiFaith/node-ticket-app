@@ -24,6 +24,34 @@ export const getTicket = async (req, res) => {
   });
 };
 
+export const updateTicket = async (req, res) => {
+  const { id: _id } = req.params;
+  const { userId: user } = req.user;
+  const { title, description, status, priority } = req.body;
+
+  const ticket = await Ticket.findOne({
+    _id,
+    user,
+  });
+
+  if (!ticket)
+    throw new NotFoundError(
+      "Ticket not found or you are not authorized to delete it."
+    );
+
+  const updatedTicket = await Ticket.findOneAndUpdate(
+    { _id },
+    { title, description, status, priority },
+    { new: true }
+  );
+
+  res.status(StatusCodes.OK).json({
+    status: "success",
+    message: "Ticket edited successfully!",
+    updatedTicket,
+  });
+};
+
 export const getTickets = async (req, res) => {
   try {
     const userId = req.user.userId;
