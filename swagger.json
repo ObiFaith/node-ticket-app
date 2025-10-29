@@ -5,7 +5,7 @@
     "title": "Ticket Management API",
     "description": "A RESTful API service that allow user to create and manage their tickets"
   },
-  "host": "localhost:3000",
+  "host": "https://node-ticket-app-production.up.railway.app",
   "basePath": "/",
   "tags": [
     {
