@@ -1,8 +1,6 @@
 # Ticket Management System
 
-This is the backend service for the `Ticket Management Web Application`, powering the authentication, user management, and ticket CRUD operations.
-
-It provides a clean and secure `REST API` that integrates seamlessly with the frontend implementations (React, Vue.js, and Twig).
+The Ticket Management System is designed to streamline how teams handle support tickets and internal requests. It provides a simple yet powerful platform where users can create, view, update, and delete tickets — all while maintaining secure authentication.
 
 ## Overview
 
